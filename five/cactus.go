@@ -89,26 +89,29 @@ func ComputeHandScore(c1, c2, c3, c4, c5 CactusCardScore) CactusHandRank {
 
 	/* let's do it the hard way */
 	primeNumbersMultiplication := int((c1 & 0xFF) * (c2 & 0xFF) * (c3 & 0xFF) * (c4 & 0xFF) * (c5 & 0xFF))
-	//var found bool
-	//for i := range products {
-	//	if products[i] == primeNumbersMultiplication {
-	//		found = true
-	//		index = i
-	//		break
-	//	}
-	//}
 	index = sort.SearchInts(products, primeNumbersMultiplication)
-	//index, found = sort.Find(4887, func(i int) int {
-	//	if products[i] < primeNumbersMultiplication {
-	//		return -1
-	//	}
-	//	if products[i] == primeNumbersMultiplication {
-	//		return 0
-	//	}
-	//	return 1
-	//})
-	//if !found {
-	//	panic(fmt.Sprintf("not found in products: %d", primeNumbersMultiplication))
-	//}
 	return CactusHandRank(values[index])
+}
+
+func ComputeCategoryForHandRank(s CactusHandRank) HandRankCategory {
+	switch {
+	case s > 6185:
+		return HIGH_CARD
+	case s > 3325:
+		return ONE_PAIR
+	case s > 2467:
+		return TWO_PAIR
+	case s > 1609:
+		return THREE_OF_A_KIND
+	case s > 1599:
+		return STRAIGHT
+	case s > 322:
+		return FLUSH
+	case s > 166:
+		return FULL_HOUSE
+	case s > 10:
+		return FOUR_OF_A_KIND
+	default:
+		return STRAIGHT_FLUSH
+	}
 }

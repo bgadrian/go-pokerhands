@@ -1,6 +1,9 @@
 package five
 
-import "math/rand"
+import (
+	"math/rand"
+	"time"
+)
 
 func GenerateDeck() []Card {
 	res := make([]Card, 0, 52)
@@ -16,15 +19,20 @@ func NewHandGenerator() *HandGenerator {
 	return &HandGenerator{deck: GenerateDeck()}
 }
 
-// HandGenerator is a pseudo random hand generator, it is not crypto safe
+// HandGenerator is a pseudo random hand generator, it is not crypto safe and not performant (does memory allocs)
 type HandGenerator struct {
 	deck []Card
 }
 
-// FiveHand do not reuse the slices
-func (g *HandGenerator) FiveHand() []Card {
+// FiveHand returns a random set of 5 distinct cards
+func (g *HandGenerator) FiveHand() FiveHand {
+	rand.Seed(time.Now().Unix()) //force a seed for some envs and force more entropy
+
 	rand.Shuffle(len(g.deck), func(i, j int) {
 		g.deck[i], g.deck[j] = g.deck[j], g.deck[i]
 	})
-	return g.deck[:5]
+	//to avoid slice as a pointer to be reused, we copy the cards
+	result := make(FiveHand, 5)
+	copy(result, g.deck) //will only copy 5
+	return result
 }

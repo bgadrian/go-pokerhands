@@ -22,6 +22,19 @@ const (
 	HIGH_CARD
 )
 
+var HandRankCategoriesLabels = map[HandRankCategory]string{
+	UNKNOWN:         "UNKNOWN",
+	STRAIGHT_FLUSH:  "STRAIGHT_FLUSH",
+	FOUR_OF_A_KIND:  "FOUR_OF_A_KIND",
+	FULL_HOUSE:      "FULL_HOUSE",
+	FLUSH:           "FLUSH",
+	STRAIGHT:        "STRAIGHT",
+	THREE_OF_A_KIND: "THREE_OF_A_KIND",
+	TWO_PAIR:        "TWO_PAIR",
+	ONE_PAIR:        "ONE_PAIR",
+	HIGH_CARD:       "HIGH_CARD",
+}
+
 type Card struct {
 	Suit CardSuit
 	Rank CardRank
@@ -31,6 +44,13 @@ type Card struct {
 func (c Card) String() string {
 	rl, _ := CardRankLabel(c.Rank)
 	sl, _ := CardSuitLabel(c.Suit)
+	return string([]rune{rl, sl})
+}
+
+// UI is like String but more human friendly
+func (c Card) UI() string {
+	rl, _ := CardRankLabel(c.Rank)
+	sl, _ := cardSuitUILabels[c.Suit]
 	return string([]rune{rl, sl})
 }
 
@@ -68,6 +88,12 @@ var (
 		DIAMOND: 'd',
 		HEART:   'h',
 		SPADE:   's',
+	}
+	cardSuitUILabels = map[CardSuit]rune{
+		CLUB:    '♧',
+		DIAMOND: '♢',
+		HEART:   '♡',
+		SPADE:   '♤',
 	}
 	//cardRankFromLabel maps from its label to CardRank value
 	cardSuitFromLabel = map[rune]CardSuit{

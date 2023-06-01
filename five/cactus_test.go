@@ -5,29 +5,6 @@ import (
 	"testing"
 )
 
-func ComputeCategoryForHandScore(s CactusHandRank) HandRankCategory {
-	switch {
-	case s > 6185:
-		return HIGH_CARD
-	case s > 3325:
-		return ONE_PAIR
-	case s > 2467:
-		return TWO_PAIR
-	case s > 1609:
-		return THREE_OF_A_KIND
-	case s > 1599:
-		return STRAIGHT
-	case s > 322:
-		return FLUSH
-	case s > 166:
-		return FULL_HOUSE
-	case s > 10:
-		return FOUR_OF_A_KIND
-	default:
-		return STRAIGHT_FLUSH
-	}
-}
-
 var uniqueHandsCounts = map[HandRankCategory]int{
 	HIGH_CARD:       1277,
 	ONE_PAIR:        2860,
@@ -56,7 +33,7 @@ func TestCategoriesComputeHandScore(t *testing.T) {
 						c5 := ComputeCardScore(deck[e])
 
 						score := ComputeHandScore(c1, c2, c3, c4, c5)
-						category := ComputeCategoryForHandScore(score)
+						category := ComputeCategoryForHandRank(score)
 						foundCounts[category]++
 					}
 				}
